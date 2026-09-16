@@ -1,0 +1,27 @@
+pageInfo:
+  title: Executive Observability
+  description: Portal monitoring manajemen
+appConfig:
+  theme: nord-frost
+  layout: auto
+  iconSize: small
+sections:
+  - name: Executive overview
+    items:
+      - title: Management dashboard
+        url: https://monitor.example.org
+        target: newtab
+  - name: Dashboard sumber
+    items:
+      - title: SigNoz
+        url: https://signoz.example.org/dashboard
+        target: newtab
+      - title: Uptime Kuma
+        url: https://kuma.example.org/status/production
+        target: newtab
+      - title: Matomo
+        url: https://matomo.example.org
+        target: newtab
+      - title: Superset
+        url: https://superset.example.org/superset/dashboard/executive/
+        target: newtab

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "demo",
+  "generatedAt": "2026-09-16T07:32:00Z",
+  "timezone": "Asia/Jakarta",
+  "sources": [{"id":"signoz","status":"demo","observedAt":"2026-09-16T07:32:00Z","error":null},{"id":"kuma","status":"demo","observedAt":"2026-09-16T07:32:00Z","error":null},{"id":"matomo","status":"demo","observedAt":"2026-09-16T07:30:00Z","error":null},{"id":"superset","status":"demo","observedAt":"2026-09-16T07:20:00Z","error":null}],
+  "metrics": {
+    "requestCount":{"value":1280000,"unit":"requests","source":"signoz","aggregation":"sum","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":{"from":"2026-09-15T07:32:00Z","to":"2026-09-16T07:32:00Z"},"error":null},
+    "p95Ms":{"value":342,"unit":"ms","source":"signoz","aggregation":"global_histogram_quantile_0.95","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":"trailing_24h","error":null},
+    "errorRate":{"value":0.0038,"unit":"ratio","source":"signoz","aggregation":"http_5xx / all_requests","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":"trailing_24h","error":null}
+  },
+  "applications":[{"id":"payment","name":"Payment Gateway","owner":"Platform","rag":"red","uptimeMtd":0.9972,"p95Ms":1240,"errorRate":0.0324,"mapping":{"signozServiceName":"REPLACE_PAYMENT_SERVICE","kumaMonitorId":"REPLACE_MONITOR_ID","matomoSiteId":"REPLACE_SITE_ID","supersetDashboardId":"REPLACE_UUID"}}],
+  "incidents":[{"id":"DEMO-001","appId":"payment","severity":"P1","state":"mitigating","startedAt":"2026-09-16T07:14:00Z","owner":"Platform","summary":"Kegagalan proses pembayaran","sources":["signoz","kuma"]}],
+  "notes":"Illustrative contract subset. Extend with all applications, trends, analytics and KPI using the same metric metadata envelope before implementing the live renderer."
+}

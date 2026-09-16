@@ -1,0 +1,23 @@
+services:
+  portal:
+    image: nginx:1.28-alpine
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ../dist:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+  # Optional launchpad. Start with: docker compose --profile dashy up -d
+  dashy:
+    profiles: [dashy]
+    image: lissy93/dashy:latest # Pin a tested release or digest before production.
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - ./dashy.yml:/app/user-data/conf.yml:ro
+    restart: unless-stopped
