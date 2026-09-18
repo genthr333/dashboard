@@ -1,0 +1,9 @@
+services:
+  aggregator:
+    environment:
+      DATA_MODE: production
+      PRODUCTION_CONFIG: /app/backend/production.local.json
+    env_file:
+      - .env.production
+    volumes:
+      - ../backend/production.local.json:/app/backend/production.local.json:ro

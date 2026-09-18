@@ -1,0 +1,41 @@
+{
+  "applications": [
+    {
+      "id": "portal",
+      "name": "Portal Layanan",
+      "owner": "Web Services"
+    }
+  ],
+  "signoz": {
+    "enabled": false,
+    "applications": {
+      "portal": {
+        "p95Ms": null,
+        "requestCount": null,
+        "errorCount": null
+      }
+    },
+    "globalP95Ms": null
+  },
+  "kuma": {
+    "enabled": false,
+    "applications": {
+      "portal": {
+        "currentStatusQuery": "monitor_status{monitor_name=\"Portal Production\"}",
+        "uptimeMtdQuery": null
+      }
+    }
+  },
+  "matomo": {
+    "enabled": false,
+    "siteId": 1
+  },
+  "superset": {
+    "enabled": false,
+    "successfulTransactions": null,
+    "targetTransactions": null,
+    "transactionValueIdr": null,
+    "conversionRate": null,
+    "pendingTransactions": null
+  }
+}

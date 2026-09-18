@@ -1,5 +1,19 @@
 services:
+  aggregator:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8766
+      DATA_MODE: simulation
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
   portal:
+    depends_on:
+      - aggregator
     image: nginx:1.28-alpine
     ports:
       - "127.0.0.1:8080:80"

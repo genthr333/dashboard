@@ -3,3 +3,8 @@
 !.env.example
 .sites-runtime/
 .DS_Store
+
+__pycache__/
+*.pyc
+
+backend/production.local.json

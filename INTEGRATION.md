@@ -1,3 +1,5 @@
+> Pembaruan: backend simulasi sekarang tersedia di `backend/server.py`; frontend sudah membaca `/api/v1/overview`. Compose menyertakan aggregator dan Nginx meneruskan `/api/`. Lihat `backend/README.md` untuk implementasi yang berjalan. Bagian berikut adalah rencana koneksi produksi, bukan fitur live yang sudah dibuat.
+
 # Integrasi dan deployment
 
 ## Arsitektur yang disarankan
@@ -48,7 +50,7 @@ Cookie lintas situs dapat diblokir meski `SameSite=None; Secure`; SSO tidak otom
 
 ## Deployment
 
-Compose yang diberikan hanya melayani **prototipe statis**. Endpoint `/api/` sengaja mengembalikan 501 agar integrasi yang belum dibuat tidak terlihat bekerja. Setelah BFF dibangun, ubah lokasi ini menjadi proxy ke service agregator, tambahkan service/image yang benar-benar tersedia, auth middleware, TLS ingress, healthcheck, logging tanpa token dan secret injection. File `.env.example` adalah daftar kebutuhan, belum dikonsumsi aplikasi.
+Compose melayani frontend dan **backend simulasi**. Endpoint `/api/v1/overview` kini mengembalikan hasil agregasi simulasi. Setelah BFF dibangun, ubah lokasi ini menjadi proxy ke service agregator, tambahkan service/image yang benar-benar tersedia, auth middleware, TLS ingress, healthcheck, logging tanpa token dan secret injection. File `.env.example` adalah daftar kebutuhan, belum dikonsumsi aplikasi.
 
 NOC: gunakan perangkat terkelola, akun hanya-baca, resolusi ideal 1920×1080, browser zoom 100%, layar penuh. Uji refresh token, outage sumber, partial data, timezone Asia/Jakarta, perubahan hari/bulan, isolation role, dan konflik CSP sebelum rollout.
 

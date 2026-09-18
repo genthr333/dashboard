@@ -14,14 +14,15 @@ sections:
   - name: Dashboard sumber
     items:
       - title: SigNoz
-        url: https://signoz.example.org/dashboard
+        url: http://192.168.32.247:30080/dashboard
         target: newtab
       - title: Uptime Kuma
-        url: https://kuma.example.org/status/production
+        url: http://192.168.32.247:30081/status/production
         target: newtab
       - title: Matomo
-        url: https://matomo.example.org
+        url: https://matomo.istanapresiden.go.id
         target: newtab
       - title: Superset
-        url: https://superset.example.org/superset/dashboard/executive/
+        url: https://superset-dev.setneg.go.id/superset/dashboard/executive/
         target: newtab
+

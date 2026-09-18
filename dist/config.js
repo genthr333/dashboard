@@ -1,8 +1,8 @@
 // Public configuration only. Never put API tokens or credentials here.
 window.OBS_CONFIG = {
-  mode: 'demo',
+  mode: 'simulation',
   portalOrigin: 'https://monitor.example.org',
-  summaryEndpoint: '/api/v1/overview', // Proposed internal BFF contract; not implemented in this static prototype.
+  summaryEndpoint: '/api/v1/overview', // Served by backend/server.py; same-origin endpoint.
   sources: {
     signoz: {name:'SigNoz', url:'https://signoz.example.org', path:'/dashboard'},
     kuma: {name:'Uptime Kuma', url:'https://kuma.example.org', path:'/status/production'},

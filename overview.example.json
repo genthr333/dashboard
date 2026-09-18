@@ -1,15 +1,327 @@
 {
   "schemaVersion": "1.0",
-  "mode": "demo",
-  "generatedAt": "2026-09-16T07:32:00Z",
+  "mode": "simulation",
+  "status": "ok",
+  "generatedAt": "2026-09-16T06:45:56.858988Z",
   "timezone": "Asia/Jakarta",
-  "sources": [{"id":"signoz","status":"demo","observedAt":"2026-09-16T07:32:00Z","error":null},{"id":"kuma","status":"demo","observedAt":"2026-09-16T07:32:00Z","error":null},{"id":"matomo","status":"demo","observedAt":"2026-09-16T07:30:00Z","error":null},{"id":"superset","status":"demo","observedAt":"2026-09-16T07:20:00Z","error":null}],
-  "metrics": {
-    "requestCount":{"value":1280000,"unit":"requests","source":"signoz","aggregation":"sum","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":{"from":"2026-09-15T07:32:00Z","to":"2026-09-16T07:32:00Z"},"error":null},
-    "p95Ms":{"value":342,"unit":"ms","source":"signoz","aggregation":"global_histogram_quantile_0.95","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":"trailing_24h","error":null},
-    "errorRate":{"value":0.0038,"unit":"ratio","source":"signoz","aggregation":"http_5xx / all_requests","status":"demo","observedAt":"2026-09-16T07:32:00Z","window":"trailing_24h","error":null}
+  "refreshAfterSeconds": 60,
+  "windows": {
+    "operations": {
+      "from": "2026-09-15T06:45:56.858988Z",
+      "to": "2026-09-16T06:45:56.858988Z"
+    },
+    "availability": "month_to_date",
+    "analytics": "trailing_24h",
+    "business": "today_Asia/Jakarta"
   },
-  "applications":[{"id":"payment","name":"Payment Gateway","owner":"Platform","rag":"red","uptimeMtd":0.9972,"p95Ms":1240,"errorRate":0.0324,"mapping":{"signozServiceName":"REPLACE_PAYMENT_SERVICE","kumaMonitorId":"REPLACE_MONITOR_ID","matomoSiteId":"REPLACE_SITE_ID","supersetDashboardId":"REPLACE_UUID"}}],
-  "incidents":[{"id":"DEMO-001","appId":"payment","severity":"P1","state":"mitigating","startedAt":"2026-09-16T07:14:00Z","owner":"Platform","summary":"Kegagalan proses pembayaran","sources":["signoz","kuma"]}],
-  "notes":"Illustrative contract subset. Extend with all applications, trends, analytics and KPI using the same metric metadata envelope before implementing the live renderer."
+  "sources": {
+    "signoz": {
+      "status": "ok",
+      "mode": "simulation",
+      "observedAt": "2026-09-16T06:45:56.858988Z",
+      "error": null
+    },
+    "kuma": {
+      "status": "ok",
+      "mode": "simulation",
+      "observedAt": "2026-09-16T06:45:56.858988Z",
+      "error": null
+    },
+    "matomo": {
+      "status": "ok",
+      "mode": "simulation",
+      "observedAt": "2026-09-16T06:45:56.858988Z",
+      "error": null
+    },
+    "superset": {
+      "status": "ok",
+      "mode": "simulation",
+      "observedAt": "2026-09-16T06:45:56.858988Z",
+      "error": null
+    }
+  },
+  "metrics": {
+    "healthRatio": 0.75,
+    "availabilityMtd": 0.9994999999999999,
+    "p95Ms": 342,
+    "errorRate": 0.0024546875,
+    "requestCount": 1280000,
+    "errorCount": 3142
+  },
+  "healthCounts": {
+    "green": 6,
+    "amber": 1,
+    "red": 1,
+    "unknown": 0
+  },
+  "applications": [
+    {
+      "id": "payment",
+      "name": "Payment Gateway",
+      "owner": "Platform",
+      "rag": "red",
+      "uptimeMtd": 0.9972,
+      "p95Ms": 1240,
+      "errorRate": 0.0324,
+      "requestCount": 60000
+    },
+    {
+      "id": "portal",
+      "name": "Portal Layanan",
+      "owner": "Web Services",
+      "rag": "amber",
+      "uptimeMtd": 0.9995,
+      "p95Ms": 680,
+      "errorRate": 0.0042,
+      "requestCount": 180000
+    },
+    {
+      "id": "identity",
+      "name": "Identity & SSO",
+      "owner": "Security",
+      "rag": "green",
+      "uptimeMtd": 0.9999,
+      "p95Ms": 142,
+      "errorRate": 0.0002,
+      "requestCount": 240000
+    },
+    {
+      "id": "mobile",
+      "name": "Aplikasi Mobile API",
+      "owner": "Digital Product",
+      "rag": "green",
+      "uptimeMtd": 0.9998,
+      "p95Ms": 218,
+      "errorRate": 0.0008,
+      "requestCount": 300000
+    },
+    {
+      "id": "documents",
+      "name": "Document Management",
+      "owner": "Enterprise Apps",
+      "rag": "green",
+      "uptimeMtd": 1,
+      "p95Ms": 186,
+      "errorRate": 0.0003,
+      "requestCount": 100000
+    },
+    {
+      "id": "notification",
+      "name": "Notification Service",
+      "owner": "Platform",
+      "rag": "green",
+      "uptimeMtd": 0.9997,
+      "p95Ms": 94,
+      "errorRate": 0.0005,
+      "requestCount": 160000
+    },
+    {
+      "id": "reporting",
+      "name": "Data & Reporting",
+      "owner": "Data Office",
+      "rag": "green",
+      "uptimeMtd": 0.9999,
+      "p95Ms": 324,
+      "errorRate": 0.0006,
+      "requestCount": 40000
+    },
+    {
+      "id": "website",
+      "name": "Public Website",
+      "owner": "Communications",
+      "rag": "green",
+      "uptimeMtd": 1,
+      "p95Ms": 126,
+      "errorRate": 0.0001,
+      "requestCount": 200000
+    }
+  ],
+  "incidents": [
+    {
+      "id": "DEMO-001",
+      "appId": "payment",
+      "severity": "P1",
+      "summary": "Kegagalan proses pembayaran",
+      "owner": "Platform",
+      "state": "Mitigasi berlangsung",
+      "startedAt": "2026-09-16T06:27:56.858988Z"
+    },
+    {
+      "id": "DEMO-002",
+      "appId": "portal",
+      "severity": "P2",
+      "summary": "Waktu respons meningkat",
+      "owner": "Web Services",
+      "state": "Investigasi",
+      "startedAt": "2026-09-16T06:03:56.858988Z"
+    }
+  ],
+  "performanceTrend": [
+    {
+      "at": "2026-09-15T07:45:56.858988Z",
+      "p95Ms": 210,
+      "errorRate": 0.001
+    },
+    {
+      "at": "2026-09-15T08:45:56.858988Z",
+      "p95Ms": 200,
+      "errorRate": 0.0011
+    },
+    {
+      "at": "2026-09-15T09:45:56.858988Z",
+      "p95Ms": 205,
+      "errorRate": 0.0008
+    },
+    {
+      "at": "2026-09-15T10:45:56.858988Z",
+      "p95Ms": 185,
+      "errorRate": 0.0007000000000000001
+    },
+    {
+      "at": "2026-09-15T11:45:56.858988Z",
+      "p95Ms": 190,
+      "errorRate": 0.0008
+    },
+    {
+      "at": "2026-09-15T12:45:56.858988Z",
+      "p95Ms": 210,
+      "errorRate": 0.001
+    },
+    {
+      "at": "2026-09-15T13:45:56.858988Z",
+      "p95Ms": 240,
+      "errorRate": 0.0012
+    },
+    {
+      "at": "2026-09-15T14:45:56.858988Z",
+      "p95Ms": 260,
+      "errorRate": 0.0014000000000000002
+    },
+    {
+      "at": "2026-09-15T15:45:56.858988Z",
+      "p95Ms": 245,
+      "errorRate": 0.001
+    },
+    {
+      "at": "2026-09-15T16:45:56.858988Z",
+      "p95Ms": 250,
+      "errorRate": 0.0013
+    },
+    {
+      "at": "2026-09-15T17:45:56.858988Z",
+      "p95Ms": 280,
+      "errorRate": 0.0015
+    },
+    {
+      "at": "2026-09-15T18:45:56.858988Z",
+      "p95Ms": 330,
+      "errorRate": 0.002
+    },
+    {
+      "at": "2026-09-15T19:45:56.858988Z",
+      "p95Ms": 310,
+      "errorRate": 0.0018
+    },
+    {
+      "at": "2026-09-15T20:45:56.858988Z",
+      "p95Ms": 430,
+      "errorRate": 0.0045000000000000005
+    },
+    {
+      "at": "2026-09-15T21:45:56.858988Z",
+      "p95Ms": 890,
+      "errorRate": 0.013999999999999999
+    },
+    {
+      "at": "2026-09-15T22:45:56.858988Z",
+      "p95Ms": 650,
+      "errorRate": 0.011000000000000001
+    },
+    {
+      "at": "2026-09-15T23:45:56.858988Z",
+      "p95Ms": 400,
+      "errorRate": 0.006
+    },
+    {
+      "at": "2026-09-16T00:45:56.858988Z",
+      "p95Ms": 340,
+      "errorRate": 0.0042
+    },
+    {
+      "at": "2026-09-16T01:45:56.858988Z",
+      "p95Ms": 315,
+      "errorRate": 0.0034999999999999996
+    },
+    {
+      "at": "2026-09-16T02:45:56.858988Z",
+      "p95Ms": 300,
+      "errorRate": 0.0032
+    },
+    {
+      "at": "2026-09-16T03:45:56.858988Z",
+      "p95Ms": 320,
+      "errorRate": 0.0034000000000000002
+    },
+    {
+      "at": "2026-09-16T04:45:56.858988Z",
+      "p95Ms": 290,
+      "errorRate": 0.003
+    },
+    {
+      "at": "2026-09-16T05:45:56.858988Z",
+      "p95Ms": 310,
+      "errorRate": 0.0032
+    },
+    {
+      "at": "2026-09-16T06:45:56.858988Z",
+      "p95Ms": 342,
+      "errorRate": 0.0038
+    }
+  ],
+  "analytics": {
+    "uniqueVisitors": 24800,
+    "pageViews": 86200,
+    "bounceRate": 0.326,
+    "averageSessionSeconds": 222,
+    "hourlyVisits": [
+      180,
+      120,
+      90,
+      60,
+      90,
+      150,
+      250,
+      360,
+      520,
+      620,
+      590,
+      660,
+      710,
+      780,
+      670,
+      830,
+      910,
+      800,
+      720,
+      650,
+      480,
+      420,
+      340,
+      250
+    ]
+  },
+  "business": {
+    "successfulTransactions": 12486,
+    "targetTransactions": 15000,
+    "transactionValueIdr": 1840000000,
+    "conversionRate": 0.0482,
+    "pendingTransactions": 126
+  },
+  "definitions": {
+    "health": "green / all applications; null when unknown exists",
+    "availability": "equal-weight mean of application uptime MTD",
+    "errorRate": "sum(errorCount) / sum(requestCount)",
+    "p95": "simulated quantile of global request distribution",
+    "missing": "null, never zero or healthy"
+  }
 }
