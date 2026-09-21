@@ -4,7 +4,7 @@
 .sites-runtime/
 .DS_Store
 
-__pycache__/
-*.pyc
-
-backend/production.local.json
+# Python cache - EXCEPT the compiled app itself (source .py is missing, .pyc IS the app)
+__pycache__/*
+!__pycache__/server.cpython-313.pyc
+!__pycache__/production.cpython-313.pyc

@@ -11,4 +11,4 @@ $env:SIGNOZ_URL = "https://192.168.32.247:30444"
 $env:SIGNOZ_API_KEY = "yHsIv9EK7EZi0DcCK38B4kEovI/wBTBv8EBufOulngg="
 
 Set-Location "$PSScriptRoot\backend"
-python server.pyc
+python server.py

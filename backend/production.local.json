@@ -1,0 +1,55 @@
+{
+  "applications": [
+    {
+      "id": "portal",
+      "name": "Portal Dev Setneg",
+      "owner": "Web Services"
+    }
+  ],
+  "signoz": {
+    "enabled": true,
+    "applications": {
+      "portal": {
+        "p95Ms": {
+          "body": {"start":"$START_MS","end":"$END_MS","requestType":"scalar","compositeQuery":{"queries":[{"type":"builder_query","spec":{"name":"A","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"p95(duration_nano)"}],"filter":{"expression":"service.name = 'portal-admin-backend'"}}}]}},
+          "valuePointer": "/data/data/results/0/data/0/0",
+          "scale": 0.000001
+        },
+        "requestCount": {
+          "body": {"start":"$START_MS","end":"$END_MS","requestType":"scalar","compositeQuery":{"queries":[{"type":"builder_query","spec":{"name":"A","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"count()"}],"filter":{"expression":"service.name = 'portal-admin-backend'"}}}]}},
+          "valuePointer": "/data/data/results/0/data/0/0"
+        },
+        "errorCount": {
+          "body": {"start":"$START_MS","end":"$END_MS","requestType":"scalar","compositeQuery":{"queries":[{"type":"builder_query","spec":{"name":"A","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"count()"}],"filter":{"expression":"service.name = 'portal-admin-backend' AND has_error = true"}}}]}},
+          "valuePointer": "/data/data/results/0/data/0/0"
+        }
+      }
+    },
+    "globalP95Ms": {"body": {"start":"$START_MS","end":"$END_MS","requestType":"scalar","compositeQuery":{"queries":[{"type":"builder_query","spec":{"name":"A","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"p95(duration_nano)"}],"filter":{"expression":"service.name = 'portal-admin-backend'"}}}]}}, "valuePointer": "/data/data/results/0/data/0/0", "scale": 0.000001},
+    "trend": {
+      "body": {"start":"$START_MS","end":"$END_MS","requestType":"time_series","compositeQuery":{"queries":[{"type":"builder_query","spec":{"name":"A","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"p95(duration_nano)"}],"filter":{"expression":"service.name = 'portal-admin-backend'"}}},{"type":"builder_query","spec":{"name":"B","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"count()"}],"filter":{"expression":"service.name = 'portal-admin-backend' AND has_error = true"}}},{"type":"builder_query","spec":{"name":"C","signal":"traces","stepInterval":null,"disabled":false,"aggregations":[{"expression":"count()"}],"filter":{"expression":"service.name = 'portal-admin-backend'"}}}]}},
+      "p95Scale": 0.000001
+    }
+  },
+  "kuma": {
+    "enabled": true,
+    "applications": {
+      "portal": {
+        "currentStatusQuery": "monitor_status{monitor_name=\"portal dev setneg\"}",
+        "uptimeMtdQuery": "avg_over_time(monitor_status{monitor_name=\"portal dev setneg\"}[30d])"
+      }
+    }
+  },
+  "matomo": {
+    "enabled": true,
+    "siteId": 4
+  },
+  "superset": {
+    "enabled": false,
+    "successfulTransactions": null,
+    "targetTransactions": null,
+    "transactionValueIdr": null,
+    "conversionRate": null,
+    "pendingTransactions": null
+  }
+}
