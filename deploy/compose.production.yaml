@@ -2,8 +2,14 @@ services:
   aggregator:
     environment:
       DATA_MODE: production
+      HOST: 0.0.0.0
+      PORT: 8766
       PRODUCTION_CONFIG: /app/backend/production.local.json
-    env_file:
-      - .env.production
+      MATOMO_URL: https://matomo.istanapresiden.go.id
+      MATOMO_TOKEN_AUTH: 3661d419ce3be50613490646ca8e2574
+      PROMETHEUS_URL: https://192.168.32.247:30443
+      PROMETHEUS_BEARER_TOKEN: uk2_xLM8CfhIizcHbmTAYG4L1sGufsJBWbZqQtjsPAc6
+      SIGNOZ_URL: https://192.168.32.247:30444
+      SIGNOZ_API_KEY: yHsIv9EK7EZi0DcCK38B4kEovI/wBTBv8EBufOulngg=
     volumes:
       - ../backend/production.local.json:/app/backend/production.local.json:ro

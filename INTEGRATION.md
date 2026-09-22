@@ -1,4 +1,4 @@
-> Pembaruan: backend simulasi sekarang tersedia di `backend/server.py`; frontend sudah membaca `/api/v1/overview`. Compose menyertakan aggregator dan Nginx meneruskan `/api/`. Lihat `backend/README.md` untuk implementasi yang berjalan. Bagian berikut adalah rencana koneksi produksi, bukan fitur live yang sudah dibuat.
+> Pembaruan (22 September 2026): mode produksi sudah terhubung nyata ke SigNoz, Kuma (via Prometheus), dan Matomo — lihat `backend/README.md` dan `PRODUCTION.md`. Bagian di bawah (OIDC gateway, BFF terpisah, caching multi-tier, Superset Embedded SDK) 
 
 # Integrasi dan deployment
 
@@ -29,6 +29,8 @@ Kuma `/metrics` bukan endpoint historis SLA dan bukan API insiden umum. Simpan s
 Setiap sumber dan metrik memiliki `observedAt`, `window`, `status`, dan `error`. Ambang stale contoh: operasi 180 detik, Matomo 15 menit, bisnis 45 menit. Gagal/hilang/stale ditampilkan abu-abu dengan umur data; data terakhir boleh terlihat tetapi ditandai stale. Jangan mengganti kegagalan dengan nol/hijau atau fixture demo. Beri label provisional bila periode belum lengkap. Setiap metrik harus melacak lineage sumber, unit, aggregation, dan denominator.
 
 Untuk produksi, pisahkan status real-time dari kepatuhan SLA MTD agar pelanggaran historis tidak dikira gangguan aktif; aturan RAG contoh di prototipe sengaja mengangkat keduanya untuk perhatian manajemen. Tetapkan criticality weights dan SLO per aplikasi bersama owner.
+
+**Update**: pemisahan ini sudah diimplementasikan — status (RAG) mengikuti kondisi real-time (`up` dari Kuma), kolom Uptime tabel tetap menampilkan rata-rata historis terpisah, tidak lagi memengaruhi warna status. Lihat `backend/README.md` bagian "Status/RAG per aplikasi".
 
 ## Auth dan akses
 

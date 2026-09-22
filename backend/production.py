@@ -117,7 +117,10 @@ def prom(spec, now):
         "/api/v1/query?" + urlencode({"query": spec, "time": now.timestamp()}),
         headers=headers,
     )
-    return float(result["data"]["result"][0]["value"][1])
+    results = result.get("data", {}).get("result", [])
+    if not results:
+        return None  # CHANGED: no data (transient scrape gap) is not a hard failure
+    return float(results[0]["value"][1])
 
 
 def signoz_trend(spec, now):

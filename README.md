@@ -1,23 +1,50 @@
-> Mode produksi kini tersedia. Lihat [panduan produksi](PRODUCTION.md). Koneksi aktual memerlukan konfigurasi server; petunjuk simulasi berikut tetap berlaku untuk mode default.
-
 # Observatory — Executive Observability
 
-Dashboard kini mengambil data dari backend agregasi simulasi empat platform. Semua angka dan insiden masih simulasi; belum ada koneksi produksi.
+Dashboard eksekutif yang menggabungkan data dari SigNoz, Uptime Kuma, dan Matomo (Superset belum terhubung) ke satu tampilan. Mendukung mode simulasi (default, tanpa koneksi apa pun) dan mode produksi (`DATA_MODE=production`, terhubung ke sumber nyata).
 
-## Jalankan
+## Jalankan (mode produksi)
 
-Dari folder proyek jalankan `python3 backend/server.py`, kemudian buka http://127.0.0.1:8766/. Jangan membuka HTML langsung atau memakai server statis lama pada port 8765 karena endpoint API tidak tersedia di sana.
+Dari folder proyek, set environment variable berikut (lihat [PRODUCTION.md](PRODUCTION.md) untuk detail lengkap tiap sumber), lalu:
 
-Alternatif Docker: `docker compose -f deploy/compose.yaml up --build -d`, lalu buka http://localhost:8080. Nginx meneruskan API ke service aggregator. Docker belum diuji pada sesi ini.
+```sh
+export DATA_MODE=production
+export PRODUCTION_CONFIG="$(pwd)/backend/production.local.json"
+# ...env var lain sesuai PRODUCTION.md
+cd backend
+python3 server.py
+```
+
+Buka http://127.0.0.1:8766/.
+
+## Jalankan (Docker, direkomendasikan)
+
+```sh
+docker compose -f deploy/compose.yaml -f deploy/compose.production.yaml up --build
+```
+
+Buka http://localhost:8080. Nginx meneruskan API ke service `aggregator`. Sudah diuji jalan (Windows + Docker Desktop, 22 September 2026).
+
+**Catatan penting**: sertifikat internal (`prometheus-ca.crt`) sudah "dibakar" ke dalam image lewat `Dockerfile` (`update-ca-certificates`), jadi tidak perlu dipasang manual di komputer masing-masing seperti sebelumnya.
 
 ## Isi paket
 
-- `backend/server.py`: empat adapter simulasi, agregasi, endpoint GET `/api/v1/overview`, serta server frontend.
-- `backend/README.md`: kontrak, contoh URL, failure/stale simulation, cara menjalankan dan batas implementasi.
-- `backend/test_server.py`: pengujian perhitungan, isolasi kegagalan dan stale data.
-- `dist/`: frontend yang membaca API setiap 60 detik; semua panel data utama memakai respons backend.
-- `overview.example.json`: contoh respons lengkap.
-- `deploy/`: Compose, Nginx dan Dashy opsional.
-- `INTEGRATION.md`: rancangan koneksi ke platform produksi.
+- `backend/server.py`: agregasi 4 sumber, endpoint GET `/api/v1/overview`, server HTTP (routing statis + API).
+- `backend/production.py`: adapter yang menghubungkan ke SigNoz, Kuma (via Prometheus), Matomo, dan Superset di mode produksi.
+- `backend/production.local.json`: konfigurasi query per sumber (rahasia/kredensial via environment variable, bukan file ini).
+- `backend/README.md`: kontrak API, cara menjalankan, environment variable yang dibutuhkan.
+- `dist/`: frontend yang membaca API setiap 60 detik.
+- `deploy/`: Docker Compose (dasar + override produksi) dan konfigurasi Nginx.
+- `PRODUCTION.md`: panduan lengkap menghubungkan tiap sumber data.
 
-Status sumber API dapat OK meski aplikasi yang dipantau kritis; kedua hal tersebut berbeda. Endpoint dan dashboard diberi label simulasi. Data gagal/kedaluwarsa menjadi null/unknown. Tidak ada token diperlukan. Gunakan gateway SSO sebelum akses jaringan produksi.
+## Yang sudah berfungsi di mode produksi (per 22 September 2026)
+
+- Status per-aplikasi (Kondisi/real-time, Status/gabungan, Uptime historis 30 hari, p95, error rate, request count) — dari SigNoz + Kuma.
+- Grafik tren 24 jam (response time p95 + error rate) — dari SigNoz.
+- Insiden aktif — otomatis muncul untuk aplikasi berstatus Kritis (merah).
+- Analytics pengunjung — dari Matomo.
+- Threshold status: Merah jika down, p95 ≥ 2000ms, atau error rate ≥ 5%. Kuning jika p95 ≥ 1500ms atau error rate ≥ 2%.
+
+## Belum tersedia
+
+- Superset (Kinerja bisnis) — belum dikonfigurasi.
+- Global p95 gabungan lintas aplikasi — perlu ditambah query per sumber baru saat ada aplikasi kedua.
