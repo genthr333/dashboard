@@ -101,6 +101,8 @@ def query_metric(source, spec, now):
     path = "/api/v5/query_range" if source == "signoz" else "/api/v1/chart/data"
     result = request(secret(f"{source.upper()}_URL"), path, headers=headers, body=json.loads(body))
     v = pointer(result, spec["valuePointer"])
+    if v is None:
+        return None  # tidak ada data di window ini, bukan error
     v = number(v)
     return v * spec.get("scale", 1)
 
@@ -175,30 +177,50 @@ def adapter(source, now):
         return {"monitors": monitors}
 
     if source == "matomo":
-        def report(method):
+        def report(method, site_id):
             d = request(secret("MATOMO_URL"), "/index.php", form={
                 "module": "API",
                 "method": method,
-                "idSite": str(c["siteId"]),
+                "idSite": str(site_id),
                 "period": "day",
                 "date": "today",
                 "format": "JSON",
                 "token_auth": secret("MATOMO_TOKEN_AUTH"),
                 "format_metrics": "0",
             })
-            if d.get("result") == "error":
+            if isinstance(d, dict) and d.get("result") == "error":
                 raise ResponseError("MATOMO_REPORT_FAILED")
-            return d
+            # Matomo mengembalikan [] kalau site belum ada kunjungan hari ini
+            return d if isinstance(d, dict) else {}
 
-        visits = report("VisitsSummary.get")
-        actions = report("Actions.get")
-        count = number(visits["nb_visits"])
+        site_cfgs = c.get("sites") or [{"id": c["siteId"], "name": None}]
+        sites = []
+        tot_visits = tot_bounce = tot_length = 0
+        for s in site_cfgs:
+            visits = report("VisitsSummary.get", s["id"])
+            actions = report("Actions.get", s["id"])
+            count = number(visits.get("nb_visits", 0))
+            bounce = number(visits.get("bounce_count", 0))
+            length = number(visits.get("sum_visit_length", 0))
+            tot_visits += count
+            tot_bounce += bounce
+            tot_length += length
+            sites.append({
+                "siteId": s["id"],
+                "name": s.get("name"),
+                "uniqueVisitors": number(visits.get("nb_uniq_visitors", 0)),
+                "pageViews": number(actions.get("nb_pageviews", 0)),
+                "bounceRate": (bounce / count) if count else None,
+                "averageSessionSeconds": (length / count) if count else None,
+            })
+
         return {
-            "uniqueVisitors": number(visits["nb_uniq_visitors"]) if "nb_uniq_visitors" in visits else None,
-            "pageViews": number(actions["nb_pageviews"]),
-            "bounceRate": (number(visits["bounce_count"]) / count) if count else None,
-            "averageSessionSeconds": (number(visits["sum_visit_length"]) / count) if count else None,
+            "uniqueVisitors": sum(x["uniqueVisitors"] for x in sites),
+            "pageViews": sum(x["pageViews"] for x in sites),
+            "bounceRate": (tot_bounce / tot_visits) if tot_visits else None,
+            "averageSessionSeconds": (tot_length / tot_visits) if tot_visits else None,
             "hourlyVisits": [],
+            "sites": sites,
         }
 
     if source == "signoz":
@@ -221,12 +243,30 @@ def adapter(source, now):
         }
 
     if source == "superset":
-        fields = ("successfulTransactions", "targetTransactions", "transactionValueIdr", "conversionRate", "pendingTransactions")
-        result = {k: query_metric(source, c.get(k), now) for k in fields}
-        if not any(result.values()):
-            raise ConfigurationError("No KPI queries configured")
-        if result["conversionRate"] is not None:
-            number(result["conversionRate"], ratio=True)
-        return result
+        base = secret("SUPERSET_URL")
+        refresh = request(base, "/api/v1/security/refresh",
+                          headers={"Authorization": f"Bearer {secret('SUPERSET_REFRESH_TOKEN')}"},
+                          body={})
+        headers = {"Authorization": f"Bearer {refresh['access_token']}"}
+
+        def chart_value(chart_id):
+            d = request(base, f"/api/v1/chart/{chart_id}/data/", headers=headers)
+            rows = ((d.get("result") or [{}])[0].get("data")) or []
+            if not rows:
+                return None
+            for k, v in rows[-1].items():
+                if k != "__timestamp" and isinstance(v, (int, float)) and not isinstance(v, bool):
+                    return v
+            return None
+
+        apps = []
+        for app in c.get("apps", []):
+            apps.append({
+                "name": app["name"],
+                "kpis": [{"label": k["label"], "value": chart_value(k["chartId"])} for k in app.get("kpis", [])],
+            })
+        if not apps:
+            raise ConfigurationError("No Superset apps configured")
+        return {"apps": apps}
 
     raise ConfigurationError("Unknown source")

@@ -1,12 +1,17 @@
 import json
 import os
 import sys
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit, parse_qs
 
 import production
+
+_cache = {"data": None, "timestamp": 0}
+_cache_lock = threading.Lock()
 
 SOURCES = ("signoz", "kuma", "matomo", "superset")
 
@@ -207,8 +212,8 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == "/healthz":
             self.send_json({"status": "ok"})
             return
-
         if parsed.path == "/api/v1/overview":
+
             allowed = {"signoz", "kuma", "matomo", "superset"}
             fail = qs.get("fail", [None])[0]
             stale = qs.get("stale", [None])[0]
@@ -220,7 +225,15 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({"error": "fail/stale not allowed in production"}, status=400)
                 return
             try:
-                result = aggregate(fail, stale)
+                with _cache_lock:
+                    now_ts = time.time()
+                    if _cache["data"] and (now_ts - _cache["timestamp"]) < 45 and not fail and not stale:
+                        result = _cache["data"]
+                    else:
+                        result = aggregate(fail, stale)
+                        _cache["data"] = result
+                        if not fail and not stale:
+                            _cache["timestamp"] = now_ts
                 self.send_json(result)
             except Exception as e:
                 import traceback

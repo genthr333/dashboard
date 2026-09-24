@@ -11,5 +11,7 @@ services:
       PROMETHEUS_BEARER_TOKEN: uk2_xLM8CfhIizcHbmTAYG4L1sGufsJBWbZqQtjsPAc6
       SIGNOZ_URL: https://192.168.32.247:30444
       SIGNOZ_API_KEY: yHsIv9EK7EZi0DcCK38B4kEovI/wBTBv8EBufOulngg=
+      SUPERSET_URL: https://superset-dev.setneg.go.id
+      SUPERSET_REFRESH_TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc5MDIyMjk0NSwianRpIjoiZmI0ZTk3NGItNDkyNy00ZDIwLWI1ZDctNzFhYjM0YzllMGE1IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjQsIm5iZiI6MTc5MDIyMjk0NSwiY3NyZiI6ImNmMjY1MTM3LWJkMjktNGY5ZC1iNTJjLTUzY2NiYmM0ZTc3MyIsImV4cCI6MTc5MjgxNDk0NX0.j7tqwLsiEEjp5Je1rjJY-rb9OtrZXVbaUKSkc9VHwFk"
     volumes:
       - ../backend/production.local.json:/app/backend/production.local.json:ro
