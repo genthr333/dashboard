@@ -1,3 +1,4 @@
+```yaml
 stages:
   - build
   - deploy
@@ -36,8 +37,10 @@ deploy:observatory:
     name: dev
   script:
     - sed -i "s/__TAG__/$CI_COMMIT_SHORT_SHA/g" observatory-manual.yml
+    - kubectl create configmap observatory-config --from-file=production.local.json=backend/production.local.json -n $KUBE_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
     - kubectl apply -n $KUBE_NAMESPACE -f observatory-manual.yml
     - kubectl rollout status deployment/observatory -n $KUBE_NAMESPACE --timeout=120s
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
       when: always
+```
