@@ -42,4 +42,3 @@ deploy:observatory:
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
       when: always
-```
