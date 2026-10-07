@@ -1,0 +1,43 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  PROJECT_GROUP_ID: "istana-president"
+  PROJECT_NAME: "dashboard-observability"
+  DOCKER_REGCRED: "nexus-regcred"
+  KUBECTL_VERSION: "1.21.1-release"
+
+default:
+  tags:
+    - docker
+
+include:
+  - project: tabeldata.co.id/gitlab-cicd-templates
+    ref: main
+    file: build.docker.gitlab-ci.yml
+  - project: tabeldata.co.id/gitlab-cicd-templates
+    ref: main
+    file: kubernetes.gitlab-ci.yml
+
+build:docker:
+  stage: build
+  extends: .build-docker
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: always
+
+deploy:observatory:
+  stage: deploy
+  extends: .kubernetes-config
+  needs:
+    - build:docker
+  environment:
+    name: dev
+  script:
+    - sed -i "s/__TAG__/$CI_COMMIT_SHORT_SHA/g" observatory-manual.yml
+    - kubectl apply -n $KUBE_NAMESPACE -f observatory-manual.yml
+    - kubectl rollout status deployment/observatory -n $KUBE_NAMESPACE --timeout=120s
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: always
