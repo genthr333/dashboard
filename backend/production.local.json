@@ -1,4 +1,4 @@
-{
+﻿{
   "applications": [
     {
       "id": "portal",
@@ -75,14 +75,14 @@
     "enabled": true,
     "apps": [
       {"name": "Spartan", "kpis": [
-        {"label": "Kendaraan", "chartId": 221},
-        {"label": "Bangunan", "chartId": 222},
-        {"label": "Satwa", "chartId": 247}
+        {"label": "Kendaraan", "chartId": 175},
+        {"label": "Bangunan", "chartId": 174},
+        {"label": "Satwa", "chartId": 172}
       ]},
       {"name": "Astina", "kpis": [
-        {"label": "Lukisan", "chartId": 216},
-        {"label": "Objek", "chartId": 215},
-        {"label": "Total koleksi", "chartId": 214}
+        {"label": "Lukisan", "chartId": 166},
+        {"label": "Objek", "chartId": 164},
+        {"label": "Total koleksi", "chartId": 163}
       ]}
     ]
   }
